@@ -1,0 +1,42 @@
+div#paging
+{
+    text-align: center;
+    /* スクロールに対してページングボックスの位置を固定 */
+    position: fixed;
+    /* 位置を指定 */
+    bottom: 0;
+    right:45%;
+}
+
+div#pagingbox{
+    background: #FFF;
+}
+
+th{
+    /* ヘッダ背景塗りつぶし */
+    background: #008000;
+}
+th,td {
+    /* 枠線を1本線指定 */
+    border: solid 1px;
+    width:50px;
+    height: 50px;
+    text-align: center;
+    font-size: 30px;
+}
+
+table{
+    /* 枠線を1本線指定 */
+    border: solid 3px;
+    border-collapse:  collapse;
+    white-space: nowrap;
+    background: #008000;
+}
+
+footer{
+    position: fixed;
+    width: 100%;
+    background-color: #C0C0C0;
+    padding: 15px 0;
+    bottom: 0; /*下に固定*/
+}

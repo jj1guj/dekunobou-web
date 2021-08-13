@@ -25,14 +25,10 @@ class Board{
         this.point=[2,2];
     }
 
-    is_gameover(){
-    }
-
     push(move){
         if(0<=move&&move<=63){
             var row=Math.floor(move/8);
             var col=move%8;
-            console.log(row,col);
             if(this.board[row][col]!=0)return -1;
             
             var fliped=this.set_flip_limit(row,col);
@@ -43,13 +39,13 @@ class Board{
 
             for(var dir=0;dir<8;++dir){
                 for(var i=1;i<this.flip_limit[dir];++i){
-                    this.board[row+this.di[dir]*i][col+this.dj[dir]*i]=this.stone[this.turn];
+                    this.board[row+this.di[dir]*i][col+this.dj[dir]*i]=this.stone[Number(this.turn)];
                 }
             }
 
             //着手後の石の枚数を計算
-            this.point[this.turn]+=fliped+1;
-            this.point[!this.turn]-=fliped;
+            this.point[Number(this.turn)]+=fliped+1;
+            this.point[Number(!this.turn)]-=fliped;
 
             this.turn=(this.turn+1)%2;//手番を反転
             return 0;
@@ -151,6 +147,28 @@ class Board{
     }
 }
 
+//終局かどうか判定
+function is_gameover(board){
+    //0なら対局中, 1なら先手勝ち, 2なら後手勝ち, 3なら引き分け
+    if(board.point[0]+board.point[1]==64){
+        if(board.point[0]>board.point[1])return 1;
+        else if(board.point[0]<board.point[1])return 2;
+        else return 3;
+    }
+
+    //先手・後手ともに着手できなければ終局
+    if(LegalMoveList(board).length==0){
+        board.turn=!board.turn;
+        if(LegalMoveList(board).length==0){
+            if(board.point[0]>board.point[1])return 1;
+            else if(board.point[0]<board.point[1])return 2;
+            else return 3;
+        }
+        board.turn=!board.turn;
+    }
+    return 0;
+}
+
 //合法手のリストを生成
 function LegalMoveList(board){
     let movelist=[];
@@ -170,12 +188,44 @@ function LegalMoveList(board){
 
 var board=new Board();
 human_turn=false;
+const message=["先手勝ち","後手勝ち","引き分け"];
 
 function makeMove(){
     id=Number(this.getAttribute("id"));
-    if(!LegalMoveList(board).includes(id)||board.turn!=human_turn)return;
+    if(!LegalMoveList(board).includes(id)/*||board.turn!=human_turn*/)return;
+    //board.push(id);
+    //console.log(id);
+    move(id);
+}
+
+function move(id){
     board.push(id);
-    console.log(id);
+
+    //着手後の盤面を表示
+    var moves=LegalMoveList(board);
+    for(var i=0; i<8;++i){
+        for(var j=0; j<8;++j){
+            document.getElementById(8*i+j).innerHTML="";
+            if(board.board[i][j]==1){
+                document.getElementById(8*i+j).innerHTML="<span class='stone_black'></span>";
+            }else if(board.board[i][j]==2){
+                document.getElementById(8*i+j).innerHTML="<span class='stone_white'></span>";
+            }
+            if(moves.includes(8*i+j)){
+                document.getElementById(8*i+j).innerHTML="<span class='can_put'></span>";
+            }
+        }
+    }
+
+    //枚数の表示
+    document.getElementById("point_black").textContent=String(board.point[0]);
+    document.getElementById("point_white").textContent=String(board.point[1]);
+
+    //終局の判定
+    if(is_gameover(board)!=0){
+        //alert(message[is_gameover(board)-1]);
+        document.getElementById("result").textContent=message[is_gameover(board)-1];
+    }
 }
 
 //盤面の生成
@@ -207,3 +257,7 @@ for(var i=0; i<8;++i){
         }
     }
 }
+
+//枚数の表示
+document.getElementById("point_black").textContent=String(board.point[0]);
+document.getElementById("point_white").textContent=String(board.point[1]);

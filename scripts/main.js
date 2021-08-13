@@ -5,7 +5,7 @@ class Board{
         this.turn=false;//trueなら後手
         this.point;
         this.stone= [1,2];
-        this.flip_limit;
+        this.flip_limit=[0,0,0,0,0,0,0,0];
         this.di=[0,0,-1,1,-1,1,-1,1];
         this.dj=[-1,1,0,0,1,1,-1,-1];
 
@@ -38,7 +38,7 @@ class Board{
             if(fliped==0)return -1;
 
             //石を返す
-            this.board[row][col]=this.stone[this.turn];
+            this.board[row][col]=this.stone[Number(this.turn)];
 
             for(var dir=0;dir<8;++dir){
                 for(var i=1;i<this.flip_limit[dir];++i){
@@ -50,7 +50,7 @@ class Board{
             this.point[turn]+=fliped+1;
             this.point[!turn]-=fliped;
 
-            this.turn=!this.turn;//手番を反転
+            this.turn=(this.turn+1)%2;//手番を反転
             return 0;
         }
     }
@@ -59,86 +59,94 @@ class Board{
         //返せる石の枚数が返り値
         var flip_count=0;
         //横左方向
-        this.flip_limit=[];
-        this.flip_limit.push(0);
+        //this.flip_limit=[];
+        //this.flip_limit.push(0);
+        this.flip_limit[0]=0;
         for(var i=1;i<=col;++i){
-            if(this.board[row][col-i]!=this.stone[!turn]){
-                if(board[row][col-i]==this.stone[turn])flip_limit[0]=i;
+            if(this.board[row][col-i]!=this.stone[Number(!this.turn)]){
+                if(this.board[row][col-i]==this.stone[Number(this.turn)])this.flip_limit[0]=i;
                 break;
             }
         }
-        if(flip_limit[0]>1)flip_count+=flip_limit[0]-1;
+        if(this.flip_limit[0]>1)flip_count+=this.flip_limit[0]-1;
 
         //横右方向
-        this.flip_limit.push(0);
+        //this.flip_limit.push(0);
+        this.flip_limit[1]=0;
         for(var i=1;i<=7-col;++i){
-            if(this.board[row][col+i]!=this.stone[!turn]){
-                if(board[row][col+i]==this.stone[turn])flip_limit[1]=i;
+            if(this.board[row][col+i]!=this.stone[Number(!this.turn)]){
+                if(this.board[row][col+i]==this.stone[Number(this.turn)])this.flip_limit[1]=i;
                 break;
             }
         }
-        if(flip_limit[1]>1)flip_count+=flip_limit[1]-1;
+        if(this.flip_limit[1]>1)flip_count+=this.flip_limit[1]-1;
 
         //縦上方向
-        this.flip_limit.push(0);
+        //this.flip_limit.push(0);
+        this.flip_limit[2]=0;
         for(var i=1;i<=row;++i){
-            if(this.board[row-i][col]!=this.stone[!turn]){
-                if(board[row-i][col]==this.stone[turn])flip_limit[2]=i;
+            if(this.board[row-i][col]!=this.stone[Number(!this.turn)]){
+                if(this.board[row-i][col]==this.stone[Number(this.turn)])this.flip_limit[2]=i;
                 break;
             }
         }
-        if(flip_limit[2]>1)flip_count+=flip_limit[2]-1;
+        if(this.flip_limit[2]>1)flip_count+=this.flip_limit[2]-1;
 
         //縦下方向
-        this.flip_limit.push(0);
+        //this.flip_limit.push(0);
+        this.flip_limit[3]=0;
         for(var i=1;i<=7-row;++i){
-            if(this.board[row+i][col]!=this.stone[!turn]){
-                if(board[row+i][col]==this.stone[turn])flip_limit[3]=i;
+            if(this.board[row+i][col]!=this.stone[Number(!this.turn)]){
+                if(this.board[row+i][col]==this.stone[Number(this.turn)])this.flip_limit[3]=i;
                 break;
             }
         }
-        if(flip_limit[3]>1)flip_count+=flip_limit[3]-1;
+        if(this.flip_limit[3]>1)flip_count+=this.flip_limit[3]-1;
 
         //右斜め上方向
-        this.flip_limit.push(0);
+        //this.flip_limit.push(0);
+        this.flip_limit[4]=0;
         for(var i=1;i<=Math.min(row,7-col);++i){
-            if(this.board[row-i][col+i]!=this.stone[!turn]){
-                if(board[row-i][col+i]==this.stone[turn])flip_limit[4]=i;
+            if(this.board[row-i][col+i]!=this.stone[Number(!this.turn)]){
+                if(this.board[row-i][col+i]==this.stone[Number(this.turn)])this.flip_limit[4]=i;
                 break;
             }
         }
-        if(flip_limit[4]>1)flip_count+=flip_limit[4]-1;
+        if(this.flip_limit[4]>1)flip_count+=this.flip_limit[4]-1;
 
         //右斜め下方向
-        this.flip_limit.push(0);
+        //this.flip_limit.push(0);
+        this.flip_limit[5]=0;
         for(var i=1;i<=Math.min(7-row,7-col);++i){
-            if(this.board[row+i][col+i]!=this.stone[!turn]){
-                if(board[row+i][col+i]==this.stone[turn])flip_limit[5]=i;
+            if(this.board[row+i][col+i]!=this.stone[Number(!this.turn)]){
+                if(this.board[row+i][col+i]==this.stone[Number(this.turn)])this.flip_limit[5]=i;
                 break;
             }
         }
-        if(flip_limit[5]>1)flip_count+=flip_limit[5]-1;
+        if(this.flip_limit[5]>1)flip_count+=this.flip_limit[5]-1;
 
         //左斜め上方向
-        this.flip_limit.push(0);
+        //this.flip_limit.push(0);
+        this.flip_limit[6]=0;
         for(var i=1;i<=Math.min(row,col);++i){
-            if(this.board[row-i][col-i]!=this.stone[!turn]){
-                if(board[row-i][col-i]==this.stone[turn])flip_limit[6]=i;
+            if(this.board[row-i][col-i]!=this.stone[Number(!this.turn)]){
+                if(this.board[row-i][col-i]==this.stone[Number(this.turn)])this.flip_limit[6]=i;
                 break;
             }
         }
-        if(flip_limit[6]>1)flip_count+=flip_limit[6]-1;
+        if(this.flip_limit[6]>1)flip_count+=this.flip_limit[6]-1;
 
         //左斜め下方向
-        this.flip_limit.push(0);
+        //this.flip_limit.push(0);
+        this.flip_limit[7]=0;
         for(var i=1;i<=Math.min(7-row,col);++i){
-            if(this.board[row+i][col-i]!=this.stone[!turn]){
-                if(board[row+i][col-i]==this.stone[turn])flip_limit[7]=i;
+            if(this.board[row+i][col-i]!=this.stone[Number(!this.turn)]){
+                if(this.board[row+i][col-i]==this.stone[Number(this.turn)])this.flip_limit[7]=i;
                 break;
             }
         }
-        if(flip_limit[7]>1)flip_count+=flip_limit[7]-1;
-        return flip_limit;
+        if(this.flip_limit[7]>1)flip_count+=this.flip_limit[7]-1;
+        return flip_count;
     }
 }
 
@@ -148,7 +156,6 @@ function LegalMoveList(board){
     for(var i=0;i<8;++i)for(var j=0;j<8;++j){
         if(board.board[i][j]==0){
             board.set_flip_limit(i,j);
-            console.log(board.flip_limit)
             for(var k=0;k<8;++k){
                 if(board.flip_limit[k]>1){
                     movelist.push(8*i+j);
@@ -157,6 +164,7 @@ function LegalMoveList(board){
             }
         }
     }
+    return movelist;
 }
 
 var board=new Board();
@@ -164,7 +172,7 @@ human_turn=false;
 
 function makeMove(){
     id=Number(this.getAttribute("id"));
-    if(!legalMoveList(board).includes(id)||board.turn!=human_turn)return;
+    if(!LegalMoveList(board).includes(id)||board.turn!=human_turn)return;
     board.push(id);
     console.log(id);
 }
@@ -185,6 +193,7 @@ for(var i=0; i<8;++i){
 document.getElementById('board').appendChild(table);
 
 var moves=LegalMoveList(board);
+console.log(moves);
 for(var i=0; i<8;++i){
     for(var j=0; j<8;++j){
         if(board.board[i][j]==1){

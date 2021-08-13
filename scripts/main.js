@@ -8,6 +8,8 @@ class Board{
         this.flip_limit;
         this.di=[0,0,-1,1,-1,1,-1,1];
         this.dj=[-1,1,0,0,1,1,-1,-1];
+
+        this.init();
     }
 
     init(){
@@ -32,7 +34,7 @@ class Board{
             col=move%8;
             if(this.board[row][col]!=0)return -1;
             
-            fliped=set_flip_limit(row,col);
+            fliped=this.set_flip_limit(row,col);
             if(fliped==0)return -1;
 
             //石を返す
@@ -57,7 +59,8 @@ class Board{
         //返せる石の枚数が返り値
         var flip_count=0;
         //横左方向
-        this.flip_limit=[0];
+        this.flip_limit=[];
+        this.flip_limit.push(0);
         for(var i=1;i<=col;++i){
             if(this.board[row][col-i]!=this.stone[!turn]){
                 if(board[row][col-i]==this.stone[turn])flip_limit[0]=i;
@@ -141,11 +144,11 @@ class Board{
 
 //合法手のリストを生成
 function LegalMoveList(board){
-    let move_num=0;
     let movelist=[];
     for(var i=0;i<8;++i)for(var j=0;j<8;++j){
         if(board.board[i][j]==0){
             board.set_flip_limit(i,j);
+            console.log(board.flip_limit)
             for(var k=0;k<8;++k){
                 if(board.flip_limit[k]>1){
                     movelist.push(8*i+j);
@@ -156,8 +159,13 @@ function LegalMoveList(board){
     }
 }
 
+var board=new Board();
+human_turn=false;
+
 function makeMove(){
     id=Number(this.getAttribute("id"));
+    if(!legalMoveList(board).includes(id)||board.turn!=human_turn)return;
+    board.push(id);
     console.log(id);
 }
 
@@ -175,3 +183,17 @@ for(var i=0; i<8;++i){
 }
 
 document.getElementById('board').appendChild(table);
+
+var moves=LegalMoveList(board);
+for(var i=0; i<8;++i){
+    for(var j=0; j<8;++j){
+        if(board.board[i][j]==1){
+            document.getElementById(8*i+j).innerHTML="<span class='stone_black'></span>";
+        }else if(board.board[i][j]==2){
+            document.getElementById(8*i+j).innerHTML="<span class='stone_white'></span>";
+        }
+        if(moves.includes(8*i+j)){
+            document.getElementById(8*i+j).innerHTML="<span class='can_put'></span>";
+        }
+    }
+}

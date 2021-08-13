@@ -22,7 +22,7 @@ th,td {
     width:50px;
     height: 50px;
     text-align: center;
-    font-size: 30px;
+    vertical-align: middle;
 }
 
 table{
@@ -39,4 +39,28 @@ footer{
     background-color: #C0C0C0;
     padding: 15px 0;
     bottom: 0; /*下に固定*/
+}
+
+.can_put{
+    display: inline-block;
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    background:gray;
+}
+
+.stone_black{
+    display: inline-block;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:black;
+}
+
+.stone_white{
+    display: inline-block;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:white;
 }

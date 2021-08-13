@@ -30,11 +30,12 @@ class Board{
 
     push(move){
         if(0<=move&&move<=63){
-            row=Math.floor(move/8);
-            col=move%8;
+            var row=Math.floor(move/8);
+            var col=move%8;
+            console.log(row,col);
             if(this.board[row][col]!=0)return -1;
             
-            fliped=this.set_flip_limit(row,col);
+            var fliped=this.set_flip_limit(row,col);
             if(fliped==0)return -1;
 
             //石を返す
@@ -42,13 +43,13 @@ class Board{
 
             for(var dir=0;dir<8;++dir){
                 for(var i=1;i<this.flip_limit[dir];++i){
-                    this.board[row+this.di[dir]*i][col+this.dj[dir]*i]=this.stone[turn];
+                    this.board[row+this.di[dir]*i][col+this.dj[dir]*i]=this.stone[this.turn];
                 }
             }
 
             //着手後の石の枚数を計算
-            this.point[turn]+=fliped+1;
-            this.point[!turn]-=fliped;
+            this.point[this.turn]+=fliped+1;
+            this.point[!this.turn]-=fliped;
 
             this.turn=(this.turn+1)%2;//手番を反転
             return 0;
@@ -192,8 +193,8 @@ for(var i=0; i<8;++i){
 
 document.getElementById('board').appendChild(table);
 
+//合法手・石の表示
 var moves=LegalMoveList(board);
-console.log(moves);
 for(var i=0; i<8;++i){
     for(var j=0; j<8;++j){
         if(board.board[i][j]==1){

@@ -186,6 +186,24 @@ function LegalMoveList(board){
     return movelist;
 }
 
+//APIとの通信
+function get_func(url){
+    let formData=new FormData();
+    formData.append('board',"0000000000000000000000000002100000012000000000000000000000000000");
+    formData.append('turn',"0")
+    console.log(...formData.entries());
+    fetch(url,{
+        method:"PUT",
+        body:formData,
+    }).then(function(response){
+        return response.text();
+    }).then(function(text){
+        //ここで
+        console.log(Number(text)+1);
+    });
+}
+
+console.log(get_func("http://127.0.0.1:5000/put"));
 var board=new Board();
 human_turn=false;
 const message=["先手勝ち","後手勝ち","引き分け"];

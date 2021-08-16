@@ -264,7 +264,8 @@ function move(id){
         for(var i=0;i<64;++i)board_str+=String(board.board[Math.floor(i/8)][i%8]);
         get_func(url,board_str,String(Number(board.turn))).then((response)=>{
             const n=Number(response);
-            board.push(n);
+            //board.push(n);
+            move(n);
         })
     }
 }

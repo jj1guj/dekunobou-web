@@ -188,26 +188,34 @@ function LegalMoveList(board){
 
 //APIとの通信
 var movebyAI;
-function get_func(url){
+/*function get_func(url){
     let formData=new FormData();
     formData.append('board',"0000000000000000000000000002100000012000000000000000000000000000");
     formData.append('turn',"0")
-    console.log(...formData.entries());
     return fetch(url,{
         method:"PUT",
         body:formData,
     }).then(function(response){
         return response.text();
-    })/*.then(function(text){
-        movebyAI=Number(text);
-    });
-    console.log(movebyAI);
-    return movebyAI;*/
+    })
+}*/
+
+async function get_func(url,board,turn){
+    let formData=new FormData();
+    //for Debug
+    //formData.append('board',"0000000000000000000000000002100000012000000000000000000000000000");
+    //formData.append('turn',"0")
+    formData.append('board',board);
+    formData.append('turn',turn);
+    console.log(board);
+    console.log(turn);
+    return  fetch(url,{
+        method:"PUT",
+        body:formData,
+    }).then(response=>response.json());
 }
 
-
-console.log(get_func("http://127.0.0.1:5000/put"));
-console.log(movebyAI);
+const url="http://127.0.0.1:5000/put"
 var board=new Board();
 human_turn=false;
 const message=["先手勝ち","後手勝ち","引き分け"];
@@ -247,6 +255,17 @@ function move(id){
     if(is_gameover(board)!=0){
         //alert(message[is_gameover(board)-1]);
         document.getElementById("result").textContent=message[is_gameover(board)-1];
+    }
+
+    //エンジンに打たせる
+    if(board.turn!=false){
+        console.log("engine");
+        board_str=""
+        for(var i=0;i<64;++i)board_str+=String(board.board[Math.floor(i/8)][i%8]);
+        get_func(url,board_str,String(Number(board.turn))).then((response)=>{
+            const n=Number(response);
+            board.push(n);
+        })
     }
 }
 

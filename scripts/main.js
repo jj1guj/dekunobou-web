@@ -222,9 +222,7 @@ const message=["先手勝ち","後手勝ち","引き分け"];
 
 function makeMove(){
     id=Number(this.getAttribute("id"));
-    if(!LegalMoveList(board).includes(id)/*||board.turn!=human_turn*/)return;
-    //board.push(id);
-    //console.log(id);
+    if(!LegalMoveList(board).includes(id)||board.turn!=human_turn)return;
     move(id);
 }
 
@@ -257,6 +255,11 @@ function move(id){
         document.getElementById("result").textContent=message[is_gameover(board)-1];
     }
 
+    //パスの判定
+    if(LegalMoveList(board).length==0){
+        board.turn=!board.turn;
+    }
+
     //エンジンに打たせる
     if(board.turn!=false){
         console.log("engine");
@@ -264,7 +267,6 @@ function move(id){
         for(var i=0;i<64;++i)board_str+=String(board.board[Math.floor(i/8)][i%8]);
         get_func(url,board_str,String(Number(board.turn))).then((response)=>{
             const n=Number(response);
-            //board.push(n);
             move(n);
         })
     }

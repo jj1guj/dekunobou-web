@@ -207,6 +207,8 @@ async function get_func(url,board,turn){
     //formData.append('turn',"0")
     formData.append('board',board);
     formData.append('turn',turn);
+    
+    //for Debug
     console.log(board);
     console.log(turn);
     return  fetch(url,{
@@ -226,10 +228,7 @@ function makeMove(){
     move(id);
 }
 
-function move(id){
-    board.push(id);
-
-    //着手後の盤面を表示
+function drawing(board){
     var moves=LegalMoveList(board);
     for(var i=0; i<8;++i){
         for(var j=0; j<8;++j){
@@ -244,6 +243,13 @@ function move(id){
             }
         }
     }
+}
+
+function move(id){
+    board.push(id);
+
+    //着手後の盤面を表示
+    drawing(board);
 
     //枚数の表示
     document.getElementById("point_black").textContent=String(board.point[0]);
@@ -253,16 +259,20 @@ function move(id){
     if(is_gameover(board)!=0){
         //alert(message[is_gameover(board)-1]);
         document.getElementById("result").textContent=message[is_gameover(board)-1];
+        return 0;
     }
 
     //パスの判定
     if(LegalMoveList(board).length==0){
         board.turn=!board.turn;
+
+        //エンジン側がパスしたときは盤面と合法手を再描画
+        drawing(board);
     }
 
     //エンジンに打たせる
     if(board.turn!=false){
-        console.log("engine");
+        //console.log("engine");
         board_str=""
         for(var i=0;i<64;++i)board_str+=String(board.board[Math.floor(i/8)][i%8]);
         get_func(url,board_str,String(Number(board.turn))).then((response)=>{

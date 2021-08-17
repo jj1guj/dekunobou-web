@@ -10,7 +10,7 @@ CORS(api)
 def put():
     board=request.form["board"]
     turn=request.form["turn"]
-    cp=subprocess.run(["dekunobou",board,turn],encoding="utf-8",stdout=subprocess.PIPE)
+    cp=subprocess.run(["./dekunobou",board,turn],encoding="utf-8",stdout=subprocess.PIPE)
     return str(int(cp.stdout))
 
 #人間からの指し手を受け取る(いらない)

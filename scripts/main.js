@@ -255,6 +255,13 @@ function move(id){
     document.getElementById("point_black").textContent=String(board.point[0]);
     document.getElementById("point_white").textContent=String(board.point[1]);
 
+    //手番の表示
+    if(board.turn==true){
+        document.getElementById("turn").textContent="AI";
+    }else{
+        document.getElementById("turn").textContent="人間";
+    }
+
     //終局の判定
     if(is_gameover(board)!=0){
         //alert(message[is_gameover(board)-1]);
@@ -315,3 +322,10 @@ for(var i=0; i<8;++i){
 //枚数の表示
 document.getElementById("point_black").textContent=String(board.point[0]);
 document.getElementById("point_white").textContent=String(board.point[1]);
+
+//手番の表示
+if(board.turn==true){
+    document.getElementById("turn").textContent="AI";
+}else{
+    document.getElementById("turn").textContent="人間";
+}

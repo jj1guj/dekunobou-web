@@ -10,6 +10,8 @@ CORS(api)
 def put():
     board=request.form["board"]
     turn=request.form["turn"]
+    #バイナリに実行権限を与える
+    subprocess.run(["bash", "permission.sh"])
     cp=subprocess.run(["./dekunobou",board,turn],encoding="utf-8",stdout=subprocess.PIPE)
     return str(int(cp.stdout))
 

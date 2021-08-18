@@ -217,7 +217,7 @@ async function get_func(url,board,turn){
     }).then(response=>response.json());
 }
 
-const url="http://127.0.0.1:5000/put"
+const url="https://dekunobou-api.herokuapp.com/put"
 var board=new Board();
 human_turn=false;
 const message=["先手勝ち","後手勝ち","引き分け"];

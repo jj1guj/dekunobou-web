@@ -305,19 +305,7 @@ for(var i=0; i<8;++i){
 document.getElementById('board').appendChild(table);
 
 //合法手・石の表示
-var moves=LegalMoveList(board);
-for(var i=0; i<8;++i){
-    for(var j=0; j<8;++j){
-        if(board.board[i][j]==1){
-            document.getElementById(8*i+j).innerHTML="<span class='stone_black'></span>";
-        }else if(board.board[i][j]==2){
-            document.getElementById(8*i+j).innerHTML="<span class='stone_white'></span>";
-        }
-        if(moves.includes(8*i+j)){
-            document.getElementById(8*i+j).innerHTML="<span class='can_put'></span>";
-        }
-    }
-}
+drawing(board);
 
 //枚数の表示
 document.getElementById("point_black").textContent=String(board.point[0]);

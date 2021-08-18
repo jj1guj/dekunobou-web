@@ -275,6 +275,12 @@ function move(id){
 
         //エンジン側がパスしたときは盤面と合法手を再描画
         drawing(board);
+        //手番表示を更新
+        if(board.turn==true){
+            document.getElementById("turn").textContent="AI";
+        }else{
+            document.getElementById("turn").textContent="人間";
+        }
     }
 
     //エンジンに打たせる

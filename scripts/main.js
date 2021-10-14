@@ -220,7 +220,7 @@ async function get_func(url,board,turn){
 const url="https://dekunobou-api.herokuapp.com/put"
 var board=new Board();
 human_turn=false;
-const message=["先手勝ち","後手勝ち","引き分け"];
+const message=["人間の勝ち","AIの勝ち","引き分け"];
 
 function makeMove(){
     id=Number(this.getAttribute("id"));

@@ -323,3 +323,20 @@ if(board.turn==true){
 }else{
     document.getElementById("turn").textContent="人間";
 }
+
+//ツイート
+function tweet(){
+    var dataText;
+    if(is_gameover(board)==0){
+        dataText ="でくのぼう -遺伝的アルゴリズムを使ったオセロAI-"
+    }else if(is_gameover(board)==1){
+        dataText = "でくのぼうに"+board.point[0]+"対"+board.point[1]+"で勝ちました!! でくのぼう -遺伝的アルゴリズムを使ったオセロAI-"
+    }else if(is_gameover(board)==2){
+        dataText = "でくのぼうに"+board.point[0]+"対"+board.point[1]+"で負けました… でくのぼう -遺伝的アルゴリズムを使ったオセロAI-"
+    }else{
+        dataText = "でくのぼうに"+board.point[0]+"対"+board.point[1]+"で引き分けました… でくのぼう -遺伝的アルゴリズムを使ったオセロAI-"
+    }
+    console.log(dataText);
+    window.open("https://twitter.com/share?text="
+                +dataText+"&url=https://jj1guj.net/dekunobou-web/"+"&hashtags=dekunobou");
+}

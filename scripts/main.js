@@ -22,7 +22,7 @@ class Board{
         this.board[3][4]=1;
         this.board[4][3]=1;
         this.board[4][4]=2;
-        this.point=[2,2];
+        this.point=[2,2]; //[先手の枚数, 後手の枚数]
     }
 
     push(move){
@@ -200,6 +200,50 @@ var movebyAI;
     })
 }*/
 
+// 勝敗の結果をDBに登録する
+async function register_result(url,ai_turn_bool,board){
+    // 先手と後手どちらの勝ちかを取得
+    var winner=String(is_gameover(board));
+
+    // ai_turn_boolはbooleanで渡される.
+    // falseなら先手, trueなら後手
+    // DBに登録する際は先手を1, 後手を2として登録する
+    // これはis_gameover()の出力に準拠している
+    var ai_turn;
+    if(!ai_turn_bool){
+        ai_turn="1";
+    }else{
+        ai_turn="2";
+    }
+
+    // 先手の枚数と後手の枚数を取得
+    var black_point=String(board.point[0]);
+    var white_point=String(board.point[1]);
+
+    let formData=new FormData();
+    formData.append("winner",winner);
+    formData.append("ai_turn",ai_turn);
+    formData.append("black_point",black_point);
+    formData.append("white_point",white_point);
+
+    if(winner=="1" || winner=="2" || winner=="3"){
+        fetch(url,{
+            method: "POST",
+            body: formData,
+        }).then(response=>response.json());
+    }
+}
+
+// AIの通算成績を取得&表示する
+async function get_results(url){
+    fetch(url).then(response=>response.json()).then((data)=>{
+        document.getElementById("ai_win").textContent=data["ai_win"];
+        document.getElementById("ai_lose").textContent=data["ai_lose"];
+        document.getElementById("draw").textContent=data["draw"];
+        document.getElementById("win_rate").textContent=data["win_rate"];
+    });
+}
+
 async function get_func(url,board,turn){
     let formData=new FormData();
     //for Debug
@@ -207,6 +251,7 @@ async function get_func(url,board,turn){
     //formData.append('turn',"0")
     formData.append('board',board);
     formData.append('turn',turn);
+    console.log(formData);
     
     //for Debug
     console.log(board);
@@ -217,10 +262,22 @@ async function get_func(url,board,turn){
     }).then(response=>response.json());
 }
 
-const url="https://dekunobou-api.herokuapp.com/put"
+// AIの通算成績の取得
+get_results("http://172.22.74.148:5000/get_ai_result");
+
+//const url="https://dekunobou-api.herokuapp.com/put"
+const url="http://172.22.74.148:5000/put"
 var board=new Board();
 human_turn=false;
 const message=["人間の勝ち","AIの勝ち","引き分け"];
+if(board.turn!=human_turn){
+    board_str=""
+    for(var i=0;i<64;++i)board_str+=String(board.board[Math.floor(i/8)][i%8]);
+    get_func(url,board_str,String(Number(board.turn))).then((response)=>{
+        const n=Number(response);
+        move(n);
+    })
+}
 
 function makeMove(){
     id=Number(this.getAttribute("id"));
@@ -256,7 +313,7 @@ function move(id){
     document.getElementById("point_white").textContent=String(board.point[1]);
 
     //手番の表示
-    if(board.turn==true){
+    if(board.turn!=human_turn){
         document.getElementById("turn").textContent="AI";
     }else{
         document.getElementById("turn").textContent="人間";
@@ -266,6 +323,9 @@ function move(id){
     if(is_gameover(board)!=0){
         //alert(message[is_gameover(board)-1]);
         document.getElementById("result").textContent=message[is_gameover(board)-1];
+
+        // DBに結果を送信
+        register_result("http://172.22.74.148:5000/post",!human_turn,board);
         return 0;
     }
 
@@ -284,7 +344,7 @@ function move(id){
     }
 
     //エンジンに打たせる
-    if(board.turn!=false){
+    if(board.turn!=human_turn/*false*/){
         //console.log("engine");
         board_str=""
         for(var i=0;i<64;++i)board_str+=String(board.board[Math.floor(i/8)][i%8]);
@@ -318,7 +378,8 @@ document.getElementById("point_black").textContent=String(board.point[0]);
 document.getElementById("point_white").textContent=String(board.point[1]);
 
 //手番の表示
-if(board.turn==true){
+// if(board.turn==true){
+if(board.turn!=human_turn){
     document.getElementById("turn").textContent="AI";
 }else{
     document.getElementById("turn").textContent="人間";

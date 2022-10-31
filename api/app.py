@@ -20,12 +20,6 @@ def put():
     cp=subprocess.run(["./dekunobou_20221028",board,turn],encoding="utf-8",stdout=subprocess.PIPE)
     return str(int(cp.stdout))
 
-#人間からの指し手を受け取る(いらない)
-@api.route("/send",methods=["SEND"])
-def send():
-    move=request.form["move"]
-    return make_response(move)
-
 @api.route("/")
 def index():
     return "I'm dekunobou, computer othello program!"

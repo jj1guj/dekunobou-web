@@ -17,7 +17,7 @@ def put():
     turn=request.form["turn"]
     #バイナリに実行権限を与える
     subprocess.run(["bash", "permission.sh"])
-    cp=subprocess.run(["./dekunobou_20220922",board,turn],encoding="utf-8",stdout=subprocess.PIPE)
+    cp=subprocess.run(["./dekunobou_20221028",board,turn],encoding="utf-8",stdout=subprocess.PIPE)
     return str(int(cp.stdout))
 
 #人間からの指し手を受け取る(いらない)

@@ -262,18 +262,18 @@ async function get_func(url,board,turn){
     }).then(response=>response.json());
 }
 
-// AIの通算成績の取得
-get_results("http://172.22.74.148:5000/get_ai_result");
+const url="http://172.28.47.254:5000/";
 
-//const url="https://dekunobou-api.herokuapp.com/put"
-const url="http://172.22.74.148:5000/put"
+// AIの通算成績の取得
+get_results(url+"get_ai_result");
+
 var board=new Board();
 human_turn=false;
 const message=["人間の勝ち","AIの勝ち","引き分け"];
 if(board.turn!=human_turn){
     board_str=""
     for(var i=0;i<64;++i)board_str+=String(board.board[Math.floor(i/8)][i%8]);
-    get_func(url,board_str,String(Number(board.turn))).then((response)=>{
+    get_func(url+"put",board_str,String(Number(board.turn))).then((response)=>{
         const n=Number(response);
         move(n);
     })
@@ -325,7 +325,7 @@ function move(id){
         document.getElementById("result").textContent=message[is_gameover(board)-1];
 
         // DBに結果を送信
-        register_result("http://172.22.74.148:5000/post",!human_turn,board);
+        register_result(url+"post",!human_turn,board);
         return 0;
     }
 
@@ -348,7 +348,7 @@ function move(id){
         //console.log("engine");
         board_str=""
         for(var i=0;i<64;++i)board_str+=String(board.board[Math.floor(i/8)][i%8]);
-        get_func(url,board_str,String(Number(board.turn))).then((response)=>{
+        get_func(url+"put",board_str,String(Number(board.turn))).then((response)=>{
             const n=Number(response);
             move(n);
         })

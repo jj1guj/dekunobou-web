@@ -323,7 +323,13 @@ function move(id){
     //終局の判定
     if(is_gameover(board)!=0){
         //alert(message[is_gameover(board)-1]);
-        document.getElementById("result").textContent=message[is_gameover(board)-1];
+        if(!human_turn){
+            // 人間が先手
+            document.getElementById("result").textContent=message[is_gameover(board)-1];
+        }else{
+            // 人間が後手
+            document.getElementById("result").textContent=message[is_gameover(board)%2];
+        }
 
         // DBに結果を送信
         register_result(url+"post",!human_turn,board);
@@ -393,12 +399,12 @@ function tweet(){
     var dataText;
     if(is_gameover(board)==0){
         dataText ="でくのぼう -遺伝的アルゴリズムを使ったオセロAI-"
-    }else if(is_gameover(board)==1){
-        dataText = "でくのぼうに"+board.point[0]+"対"+board.point[1]+"で勝ちました!! でくのぼう -遺伝的アルゴリズムを使ったオセロAI-"
-    }else if(is_gameover(board)==2){
-        dataText = "でくのぼうに"+board.point[0]+"対"+board.point[1]+"で負けました… でくのぼう -遺伝的アルゴリズムを使ったオセロAI-"
-    }else{
+    }else if(is_gameover(board)==3){
         dataText = "でくのぼうに"+board.point[0]+"対"+board.point[1]+"で引き分けました… でくのぼう -遺伝的アルゴリズムを使ったオセロAI-"
+    }else if(is_gameover(board)==human_turn+1){
+        dataText = "でくのぼうに"+board.point[0]+"対"+board.point[1]+"で勝ちました!! でくのぼう -遺伝的アルゴリズムを使ったオセロAI-"
+    }else{
+        dataText = "でくのぼうに"+board.point[0]+"対"+board.point[1]+"で負けました… でくのぼう -遺伝的アルゴリズムを使ったオセロAI-"
     }
     console.log(dataText);
     window.open("https://twitter.com/share?text="

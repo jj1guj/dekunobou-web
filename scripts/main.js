@@ -188,17 +188,6 @@ function LegalMoveList(board){
 
 //APIとの通信
 var movebyAI;
-/*function get_func(url){
-    let formData=new FormData();
-    formData.append('board',"0000000000000000000000000002100000012000000000000000000000000000");
-    formData.append('turn',"0")
-    return fetch(url,{
-        method:"PUT",
-        body:formData,
-    }).then(function(response){
-        return response.text();
-    })
-}*/
 
 // 勝敗の結果をDBに登録する
 async function register_result(url,ai_turn_bool,board){
@@ -262,26 +251,38 @@ async function get_func(url,board,turn){
     }).then(response=>response.json());
 }
 
-const url="http://172.28.47.254:5000/";
+const url="http://localhost:5000/";
 
 // AIの通算成績の取得
 get_results(url+"get_ai_result");
 
 var board=new Board();
+game_started=false;
 human_turn=false;
-const message=["人間の勝ち","AIの勝ち","引き分け"];
-if(board.turn!=human_turn){
-    board_str=""
-    for(var i=0;i<64;++i)board_str+=String(board.board[Math.floor(i/8)][i%8]);
-    get_func(url+"put",board_str,String(Number(board.turn))).then((response)=>{
-        const n=Number(response);
-        move(n);
-    })
+function game_start(){
+    if(!game_started){
+        if(document.select_turn.human_turn[0].checked){
+            // 人間が先手
+            human_turn=false;
+        }else{
+            // 人間が後手
+            human_turn=true;
+            board_str="";
+            for(var i=0;i<64;++i)board_str+=String(board.board[Math.floor(i/8)][i%8]);
+            get_func(url+"put",board_str,String(Number(board.turn))).then((response)=>{
+                const n=Number(response);
+                move(n);
+            })
+        }
+        document.getElementById("human_first").disabled=true;
+        document.getElementById("human_second").disabled=true;
+    }
+    game_started=true;
 }
 
 function makeMove(){
     id=Number(this.getAttribute("id"));
-    if(!LegalMoveList(board).includes(id)||board.turn!=human_turn)return;
+    if(!LegalMoveList(board).includes(id)||board.turn!=human_turn||!game_started)return;
     move(id);
 }
 
@@ -354,6 +355,8 @@ function move(id){
         })
     }
 }
+
+const message=["人間の勝ち","AIの勝ち","引き分け"];
 
 //盤面の生成
 var table=document.createElement("table");

@@ -14,11 +14,13 @@
         バグ報告は <a href="https://github.com/jj1guj/dekunobou-web/issues">こちら</a> <br>
         詳細な解説記事は <a href="https://jj1guj.hatenablog.com/entry/2021/12/13/145631">こちら</a> <br>
         アップデート等の情報はこちらでつぶやきます <a href="https://twitter.com/jj1guj">@jj1guj</a><br>-->
-        <h3>対戦後<a href="https://twitter.com/search?q=%23dekunobou&src=typed_query">#dekunobou</a>や
-        <a href="https://twitter.com/search?q=%23%E3%83%A1%E3%82%A4%E3%82%AB%E3%83%BC%E3%80%86%E5%88%87%E7%A5%AD&src=recent_search_click&f=live">
-            #メイカー〆切祭
-        </a>
-         をつけてツイートお願いします！(ツイートする際は1度このWiFiから切断してください)</h3><br><br>
+        <h3>
+            対戦後<a href="https://twitter.com/search?q=%23dekunobou&src=typed_query">#dekunobou</a>や
+            <a href="https://twitter.com/search?q=%23%E3%83%A1%E3%82%A4%E3%82%AB%E3%83%BC%E3%80%86%E5%88%87%E7%A5%AD&src=recent_search_click&f=live">
+                #メイカー〆切祭
+            </a>
+            をつけてツイートお願いします！(ツイートする際は1度このWiFiから切断してください)
+        </h3>
 
         <h2>
             通算戦績: 
@@ -29,6 +31,11 @@
             <div id="win_rate" style="display: inline;"></div>%
             )
         </h2>
+        <form name="select_turn">
+            <input type="radio" name="human_turn" id="human_first" value="human_first" checked>人間が先手
+            <input type="radio" name="human_turn" id="human_second" value="human_second">人間が後手<br>
+        </form>
+        <button onclick="game_start()">対局開始</button>
         <div id="board"></div>
         手番: <div id="turn" style="display: inline;"></div><br>
         <div id="point_black" style="display: inline;"></div>

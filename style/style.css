@@ -42,6 +42,13 @@ footer{
     bottom: 0; /*下に固定*/
 }
 
+.game_start{
+    width: 150px;
+    height: 50px;
+    padding: 10px;
+    font-size: 120%;
+}
+
 .can_put{
     display: inline-block;
     /* width:20px; */

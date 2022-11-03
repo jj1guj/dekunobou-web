@@ -47,6 +47,8 @@ footer{
     height: 50px;
     padding: 10px;
     font-size: 120%;
+    background-color: #008800;
+    color:#FFF;
 }
 
 .can_put{
